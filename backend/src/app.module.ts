@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SupabaseService } from './common/supabase.service';
+import { SupabaseService } from './common/utils/supabase.service';
 import { PrismaService } from './prisma/prisma.service';
 import { AdminModule } from './admin/admin.module';
 
