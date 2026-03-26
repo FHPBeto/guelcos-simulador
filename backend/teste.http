@@ -1,0 +1,40 @@
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "cliente-vip@teste.com",
+  "password": "senha_segura_123"
+}
+
+
+
+### Criar Novo Usuário Seguro
+POST http://localhost:3000/users/register
+Content-Type: application/json
+
+{
+  "email": "humberto@teste.com",
+  "name": "Humberto Fullstack",
+  "password": "123",
+  "credits": 200
+}
+
+### Tentar Logar com o Novo Usuário
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "humberto@teste.com",
+  "password": "123"
+}
+
+
+
+### Tentar Logar com o Humberto
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "humberto@teste.com",
+  "password": "123"
+}
