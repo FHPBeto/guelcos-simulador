@@ -1,13 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private repository: UserRepository) {} // Pede o repositório aqui
 
-  async getProfile(userId: string) {
-    return this.prisma.user.findUnique({
-      where: { id: userId },
-    });
+  async create(data: any) {
+    return this.repository.create(data);
+  }
+
+  async findAll() {
+    // Por enquanto vamos deixar simples, depois melhoramos
+    return `Essa rota retorna todos os usuários`;
   }
 }
