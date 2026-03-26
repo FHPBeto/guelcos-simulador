@@ -18,6 +18,12 @@ export class UserRepository {
       where: { email },
     });
   }
+  // <--- ESSA É A PARTE QUE VOCÊ ESTÁ ACRESCENTANDO AGORA --->
+  async findById(id: string) {
+    return this.prisma.user.findUnique({
+      where: { id },
+    });
+  }
 
   // Para o módulo de CREDITS: Adiciona ou remove créditos
   async updateCredits(userId: string, amount: number) {
