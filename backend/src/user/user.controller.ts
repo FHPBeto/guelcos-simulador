@@ -7,16 +7,20 @@ export class UserController {
 
   @Get('test-create')
   async createTest() {
-    const newUser = await this.userService.create({
+    return this.userService.create({
       email: 'cliente-vip@teste.com',
       name: 'Cliente Humberto',
       password: 'senha_segura_123',
-      credits: 50 // Já testando o seu módulo de créditos!
+      credits: 50
     });
-    
+  }
+
+  @Get('use-credit')
+  async use() {
+    const updatedUser = await this.userService.useService('id-do-user'); 
     return {
-      message: 'Usuário do seu SaaS criado!',
-      newUser
+      message: 'Crédito utilizado com sucesso! Você realizou uma consulta.',
+      saldo_atual: updatedUser.credits
     };
   }
 }
