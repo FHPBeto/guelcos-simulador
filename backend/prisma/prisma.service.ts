@@ -15,8 +15,5 @@ export class PrismaService
     await this.$disconnect();
     console.log('[Prisma] Disconnected');
   }
-
-  async transaction<T>(fn: (prisma: PrismaClient) => Promise<T>): Promise<T> {
-    return this.$transaction(fn(this));
-  }
 }
+  // Optional: Add any custom methods for your Prisma service here
