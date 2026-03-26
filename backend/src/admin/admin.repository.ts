@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class AdminRepository {
   constructor(private prisma: PrismaService) {}
 
   create(email: string, password: string) {
-    return this.prisma.create({ data: { email, password } });
+    return this.prisma.admin.create({ data: { email, password } });
   }
 
   findByEmail(email: string) {
@@ -14,6 +14,6 @@ export class AdminRepository {
   }
 
   findAll() {
-    return this.prisma.findMany();
+    return this.prisma.admin.findMany();
   }
 }
