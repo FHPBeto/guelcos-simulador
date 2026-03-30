@@ -31,9 +31,42 @@ model User {
   id        String   @id @default(uuid())
   email     String   @unique
   name      String?
-  password  String   // Fundamental para o login
-  credits   Int      @default(0) // Seu módulo de Credits
-  stripeId  String?  // Para o seu módulo de Payments
+  password  String
+  credits   Int      @default(0)
+  stripeId  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Quotation {
+  id String @id @default(uuid())
+
+  companyId String
+  company   Company @relation(fields: [companyId], references: [id])
+
+  amount       Float
+  installments Int
+
+  interestRate     Float
+  interest         Float
+  total            Float
+  installmentValue Float
+
+  status QuotationStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Company {
+  id   String @id @default(uuid())
+  name String
+
+  quotations Quotation[]
+}
+
+enum QuotationStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
