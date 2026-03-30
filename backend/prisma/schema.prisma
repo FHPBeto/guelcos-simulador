@@ -58,6 +58,24 @@ model Quotation {
   updatedAt DateTime @updatedAt
 }
 
+model Simulation {
+  id String @id @default(uuid())
+
+  companyId String
+
+  amount       Float
+  installments Int
+
+  interestRate     Float
+  total            Float
+  installmentValue Float
+
+  approved Boolean
+  reason   String?
+
+  createdAt DateTime @default(now())
+}
+
 model Company {
   id   String @id @default(uuid())
   name String
