@@ -1,13 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Module } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service'; 
+import { SimulationsRepository } from './simulations.repository';
 import { SimulationsService } from './simulations.service';
-import { SimulateDto } from './dto/simulate.dto';
+import { SimulationsController } from './simulations.controller';
 
-@Controller('simulations')
-export class SimulationsController {
-  constructor(private service: SimulationsService) {}
-
-  @Post()
-  simulate(@Body() dto: SimulateDto) {
-    return this.service.simulate(dto);
-  }
-}
+@Module({
+  controllers: [SimulationsController],
+  providers: [SimulationsService, SimulationsRepository, PrismaService],
+})
+export class SimulationsModule {}
