@@ -1,25 +1,36 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserRepository } from '../user/user.repository';
-import * as bcrypt from 'bcrypt';
+import { AuthRepository } from './auth.repository';
+import { LoginDto } from './dto/login.dto';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private repo: AuthRepository) {}
 
-  async validateUser(email: string, pass: string): Promise<any> {
-    // Busca o usuário pelo email usando o SEU repositório
-    const user = await this.userRepository.findByEmail(email);
+  async login(data: LoginDto) {
+    const user = await this.repo.findAdminByEmail(data.email);
 
-    if (user) {
-      // Compara a senha digitada com a criptografada do banco
-      const isMatch = await bcrypt.compare(pass, user.password);
-      
-      if (isMatch) {
-        const { password, ...result } = user;
-        return result; // Retorna os dados do usuário (menos a senha)
-      }
+    if (!user || user.password !== data.password) {
+      throw new UnauthorizedException('Invalid credentials');
     }
-    
-    throw new UnauthorizedException('E-mail ou senha incorretos');
+
+    const token = jwt.sign(
+      {
+        sub: user.id,
+        role: user.role,
+      },
+      process.env.JWT_SECRET!,
+      { expiresIn: '1d' },
+    );
+
+    return { access_token: token };
+  }
+
+  verifyToken(token: string) {
+    try {
+      return jwt.verify(token, process.env.JWT_SECRET!);
+    } catch {
+      throw new UnauthorizedException('Invalid token');
+    }
   }
 }
