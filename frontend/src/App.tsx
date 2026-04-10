@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import Login from './Login';
-import Dashboard from './Dashboard';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   // O estado 'isLogged' começa verificando se já existe um login salvo

@@ -1,35 +1,51 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserRepository } from './user.repository';
-import * as bcrypt from 'bcrypt'; // Importando o mestre da segurança
+import * as bcrypt from 'bcrypt'; // Adicionamos o mestre da segurança
 
 @Injectable()
 export class UserService {
-  constructor(private repository: UserRepository) {}
+  constructor(
+    private readonly repository: UserRepository
+  ) {}
 
-  async create(data: any) {
-    // 1. Gerar o "Salt" (o tempero da segurança)
+  // 1. Rota de cadastro que o seu Controller está pedindo
+  async create(userData: any) {
     const salt = await bcrypt.genSalt();
-    
-    // 2. Transformar a senha em um código impossível de ler (Hash)
-    const hashedPassword = await bcrypt.hash(data.password, salt);
+    const hashedPassword = await bcrypt.hash(userData.password, salt);
 
-    // 3. Montar o objeto final com a senha protegida
-    const userWithHashedPassword = {
-      ...data,
+    const newUser = {
+      ...userData,
       password: hashedPassword,
+      credits: 100, // Presente de boas-vindas
     };
 
-    // 4. Salvar no banco de dados via repositório
-    return this.repository.create(userWithHashedPassword);
+    return this.repository.create(newUser);
   }
 
+  // 2. Sua função de busca por email (Já estava perfeita!)
+  async findByEmail(email: string) {
+    const user = await this.repository.findByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    return {
+      name: user.name || 'Usuário',
+      email: user.email,
+      credits: user.credits,
+    };
+  }
+
+  // 3. Sua função de saldo por ID
   async getUserBalance(userId: string) {
     const user = await this.repository.findById(userId);
-    if (!user) throw new NotFoundException('Usuário não encontrado');
-    
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
     return {
       email: user.email,
-      credits: user.credits
+      credits: user.credits,
     };
   }
 }

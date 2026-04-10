@@ -16,4 +16,11 @@ export class UserController {
   async getBalance(@Param('id') id: string) {
     return this.userService.getUserBalance(id);
   }
+
+  // Rota para buscar o perfil completo pelo e-mail
+  @Get('profile/:email')
+  async getProfile(@Param('email') email: string) {
+    return this.userService.findByEmail(email);
+  }
+
 }
